@@ -1,0 +1,7 @@
+Django==3.0rc1
+psycopg2==2.7.3.2
+Pillow==2.2.2
+django-material==1.6.0
+setuptools==42.0.0
+
+

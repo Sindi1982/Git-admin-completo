@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block tituloPagina %}
+Listagem de Veículos
+{% endblock tituloPagina %}
+
+{% block content %}
+
+<!-- Ɓusca -->
+<div class="row">
+  <form method="get">
+    <div class="col-lg-12">
+      <div class="input-group">
+        <input type="text" name="busca" class="form-control" placeholder="Buscar Veículo">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="submit">Pesquisar</button>
+        </span>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Fim Busca -->
+
+
+<!-- Ordenação -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"> Ordenar </h3>
+  </div>
+  <div class="panel-body">
+    <form method="get">
+      <div class="btn-group" role="group">
+          {% with cat=request.GET.ordenar %}
+        <button type="submit" class="btn btn-default {% if cat == 'preco'%} disabled {% endif %} " name="ordenar"
+          value="preco"> Menor preco </button>
+        <button type="submit" class="btn btn-default {% if cat == '-preco'%} disabled {%endif%} " name="ordenar"
+        value="-preco"> Maior preco </button>
+        <button type="submit" class="btn btn-default {% if cat == 'ano'%} disabled {%endif%} " name="ordenar"
+          value="ano"> Mais antigo </button>
+        <button type="submit" class="btn btn-default {% if cat == '-ano'%} disabled {%endif%} " name="ordenar"
+        value="-ano"> Mais novos </button>
+        {% endwith %}
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Fim ordenação -->
+
+<!-- Listagem -->
+<div class="row">
+  {% for veiculo in lista %}
+  <div class="col-md-4">
+    <div class="thumbnail">
+      <a href="{% url 'perfil_veiculo' pk=veiculo.pk %}">
+        <img src="{{veiculo.foto_capa.url}}" alt="foto do veiculo" style="width: 100%;">
+        <div class="caption">
+          <p>{{veiculo.modelo}} - {{veiculo.ano}} - R${{veiculo.preco|intcomma}}</p>
+        </div>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<!-- Fim Listagem -->
+
+<!-- Paginação -->
+<div class="pagination">
+  <span class="step-links">
+    {% if lista.has_previous %}
+    <a href="?page={{ lista.previous_page_number }}"> Anterior </a>
+    {% endif %}
+    <span class="current">
+      Página {{lista.number}} de {{ lista.paginator.num_pages }}.
+    </span>
+    {% if lista.has_next %}
+    <a href="?page={{ lista.next_page_number }}"> Próxima   </a>
+    {% endif %}
+  </span>
+</div>
+<!-- Fim Paginação -->
+{% endblock content %}
